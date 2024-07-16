@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AuthController extends Controller
 {
@@ -15,7 +16,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function loginLdap(Request $request)
     {
         $request->validate([
             'username' => 'required',
@@ -32,17 +33,28 @@ class AuthController extends Controller
             $phoneNumber = $ldapResponse['phone_number'];
             $email = $ldapResponse['email'];
 
+            // Définir le contact préféré
+            $preferredContact = $phoneNumber ?? $email;
+
+            if (!$preferredContact) {
+                return redirect()->back()->withErrors(['error' => 'Aucune adresse email ou numéro de téléphone n\'est disponible pour cet utilisateur.']);
+            }
+
             // Envoyer l'OTP
-            $otpResponse = $this->sendOtp($phoneNumber);
+            $otpResponse = $this->sendOtp($preferredContact);
+            //dd($otpResponse->json_decode());
 
-            if ($otpResponse['status'] == 'SUCCESS') {
-                Session::put('otp', $otpResponse['otp']);
-                Session::put('reference', $phoneNumber);
-                Session::put('username', $username);
+            if ($otpResponse['code'] == 200) {
+                // Stocker l'OTP et les informations utilisateur dans la session
+                session([
+                //    'otp' => $otpResponse['otp'],
+                    'reference' => $preferredContact,
+                    'username' => $username,
+                ]);
 
-                return redirect()->route('otp.verify');
+                return redirect()->route('otp.verify')->with('message', 'Un code OTP a été envoyé à votre ' . ($phoneNumber ? 'numéro de téléphone' : 'email') . '. Veuillez le saisir pour continuer.');
             } else {
-                return redirect()->back()->withErrors(['error' => 'Erreur lors de l\'envoi de l\'OTP.']);
+                return redirect()->back()->withErrors(['error' => $otpResponse['message']]);
             }
         } else {
             return redirect()->back()->withErrors(['error' => 'Authentification échouée.']);
@@ -54,30 +66,77 @@ class AuthController extends Controller
         return view('auth.otp_verify');
     }
 
+    public function check_otp_via_api($reference, $input_otp)
+    {
+        $url = 'http://10.25.3.81:5002/api/check';
+        $headers = [
+            'accept' =>'application/json',
+            'Content-Type' => 'application/json',
+        ];
+        $payload = [
+            "reference"=> $reference,
+            "origin"=> "investigation",
+            "receivedOtp"=> $input_otp,
+            "ignoreOrangeNumbers"=> false
+
+        ];
+        //dd($payload);
+
+        try {
+            $response = Http::withHeaders($headers)->send('POST', $url, [
+                'body' => $payload
+            ]);
+
+        dd($response->json());
+
+            return $response->json();
+        } catch (\Throwable $th) {
+            //\Log::info("Error checking OTP via API:", $th);
+        }
+
+    }
+
     public function verifyOtp(Request $request)
     {
-        $request->validate([
-            'otp' => 'required',
-        ]);
+        //dd($request);
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'otp' => 'required',
+            ]);
 
-        $inputOtp = $request->input('otp');
-        $sessionOtp = Session::get('otp');
-        $username = Session::get('username');
+            $inputOtp = $request->input('otp');
+            //$sessionOtp = session('otp');
+            $sessionReference = session('reference');
+            $username = session('username');
+            $response = $this->check_otp_via_api($sessionReference, $inputOtp);
+            //dd($response);
 
-        if ($inputOtp === $sessionOtp) {
-            // Vérification de l'utilisateur et connexion
-            $user = User::where('username', $username)->first();
-            if ($user) {
-                Auth::login($user);
-                Session::forget(['otp', 'reference', 'username']);
-                return redirect()->route('home');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Utilisateur non trouvé.']);
+            try {
+                $response = $this->check_otp_via_api($sessionReference, $inputOtp);
+                dd($response);
+
+                if ($response['code'] == 200 && $response['diagnosticResult']) {
+                    $user = User::where('username', $username)->first();
+                    if ($user) {
+                        Auth::login($user);
+                        session()->forget(['otp', 'reference', 'username']);
+                        return redirect()->route('dashboard');
+                    } else {
+                        return redirect()->back()->withErrors(['error' => 'Utilisateur non trouvé.']);
+                    }
+                } else {
+                    return redirect()->back()->withErrors(['error' => 'Code OTP incorrect.']);
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
             }
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Code OTP incorrect.']);
+
+
         }
+
+        return view('auth.otp_verify');
     }
+
 
     public function logout()
     {
@@ -88,52 +147,92 @@ class AuthController extends Controller
     private function authenticateViaLdap($username, $password)
     {
         $url = 'http://10.25.2.25:8080/ldap/';
-        $payload = [
-            'TYPE' => 'AUTH_SVC',
-            'APPLINAME' => 'Test',
-            'CUID' => $username,
-            'PASSWORD' => $password,
-            'DATE' => now()->format('Y-m-d H:i:s'),
-        ];
+        $payload = "
+        <COMMANDE>
+            <TYPE>AUTH_SVC</TYPE>
+            <APPLINAME>Test</APPLINAME>
+            <CUID>{$username}</CUID>
+            <PASSWORD>{$password}</PASSWORD>
+            <DATE>" . now()->format('Y-m-d H:i:s') . "</DATE>
+        </COMMANDE>";
 
-        $response = Http::asXml()->post($url, $payload);
-        $responseArray = simplexml_load_string($response->body(), "SimpleXMLElement", LIBXML_NOCDATA);
-        $json = json_encode($responseArray);
-        $array = json_decode($json,TRUE);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/xml'
+        ])->send('POST', $url, [
+            'body' => $payload
+        ]);
 
-        if ($array['REQSTATUS'] === 'SUCCESS') {
-            return [
-                'status' => 'SUCCESS',
-                'phone_number' => $array['PHONENUMBER'],
-                'email' => $array['EMAIL'],
-            ];
-        } else {
-            return ['status' => 'FAIL'];
+        if ($response->successful()) {
+            $responseArray = simplexml_load_string($response->body(), "SimpleXMLElement", LIBXML_NOCDATA);
+            $json = json_encode($responseArray);
+            $array = json_decode($json, true);
+
+            if ($array['REQSTATUS'] === 'SUCCESS') {
+                return [
+                    'status' => 'SUCCESS',
+                    'phone_number' => $array['PHONENUMBER'],
+                    'email' => $array['EMAIL'],
+                ];
+            }
         }
+
+        return ['status' => 'FAIL'];
     }
 
     private function sendOtp($destination)
     {
         $url = 'http://10.25.3.81:5002/api/generate';
+        $headers = [
+            'accept'=> 'application/json',
+            'content-type'=> 'application/json',
+        ];
+
         $payload = [
             'reference' => $destination,
-            'origin' => 'compliance',
+            'origin' => 'investigation',
             'otpOveroutTime' => 300000,
             'customMessage' => 'Dear customer, {{ otpCode }} is your OTP code. Go back to our platform and enter it to log in.',
-            'senderName' => 'Orange Investigaion',
+            'senderName' => 'Orange Investigation',
             'ignoreOrangeNumbers' => false,
         ];
 
-        $response = Http::post($url, $payload);
-        $responseArray = $response->json();
-
-        if ($response->successful()) {
-            return [
-                'status' => 'SUCCESS',
-                'otp' => $responseArray['otp'],
-            ];
-        } else {
-            return ['status' => 'FAIL'];
+        try {
+            $response = Http::post($url, $payload);
+            $response_status = $response->status();
+            //dd($response->json());
+            return $response->json();
+        } catch (\Throwable $th) {
+            \Log::info("error", $th);
         }
+
+
+
+
+        /*if ($response->successful()) {
+            $responseArray = $response->json();
+            dd($responseArray);
+            //\Log::info('Response from OTP API:', $responseArray);
+            //\Log::info('Response from OTP API:', $responseArray);
+
+
+            if (isset($responseArray['otp'])) {
+                return [
+                    'status' => 'SUCCESS',
+                    'otp' => $responseArray['otp'],
+                ];
+            } else {
+                return [
+                    'status' => 'FAIL',
+                    'message' => 'OTP not found in response'
+                ];
+            }
+        } else {
+            return [
+                'status' => 'FAIL',
+                'message' => 'Failed to send OTP'
+            ];
+        }*/
     }
+
+
 }

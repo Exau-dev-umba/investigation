@@ -17,17 +17,17 @@
             <div class="card-body">
                 <p class="login-box-msg">Connectez-vous</p>
 
-                <form action="{{ route('login') }}" method="POST">
+                <form action="{{ route('login.ldap') }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
-                        <input id="email" class="form-control" placeholder="Votre CUID" type="email"
-                            name="email" :value="old('email')" required autofocus autocomplete="username">
+                        <input id="username" class="form-control" placeholder="Votre CUID" type="username"
+                            name="username" :value="old('username')" required autofocus autocomplete="username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
                             </div>
                         </div>
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('username')" class="mt-2" />
                     </div>
                     <div class="input-group mb-3">
                         <input id="password" class="form-control" placeholder="Mot de passe" type="password"
@@ -50,28 +50,16 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn bg-orange  ">Connexion</button>
+                            <button type="submit" class="btn bg-orange  "><span class="text-white">Connexion</span></button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
-                <!--div class="social-auth-links text-center mb-3">
-                    <p>- OR -</p>
-                    <a href="{{ route('facebook.login') }}" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="{{ route('google.login') }}" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
-                    <a href="{{ route('github.login') }}" class="btn btn-block btn-dark">
-                        <i class="fab fa-github mr-2"></i> Sign in using Github
-                    </a>
-                </div -->
                 <p class="mb-1">
                     <a class="text-dark" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
                 </p>
                 <p class="mb-0">
-                    <a class="text-dark" href="{{ route('register') }}" class="text-center">Créer un nouveau compte</a>
+                    <a class="text-dark" href="{{ route('otp.verify') }}" class="text-center">Créer un nouveau compte</a>
                 </p>
             </div>
             <!-- /.card-body -->

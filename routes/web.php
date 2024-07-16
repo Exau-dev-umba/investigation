@@ -31,14 +31,14 @@ Route::get('/', function () {
 
 // Login with OTP Routes Orange RDC
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login-form', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::post('/login-ldap', [AuthController::class, 'loginLdap'])->name('login.ldap');
 Route::get('/otp-verify', [AuthController::class, 'showOtpForm'])->name('otp.verify');
 Route::post('/otp-verify', [AuthController::class, 'verifyOtp']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Socialite Routes
-Route::prefix('oauth/')->group(function(){
+/*Route::prefix('oauth/')->group(function(){
     Route::prefix('/github/login')->name('github.')->group(function(){
         Route::get('/',[SocialiteController::class,'redirectToGithub'])->name('login');
         Route::get('/callback',[SocialiteController::class,'HandleGithubCallBack'])->name('callback');
@@ -53,7 +53,7 @@ Route::prefix('oauth/')->group(function(){
         Route::get('/',[SocialiteController::class,'redirectToFaceBook'])->name('login');
         Route::get('/callback',[SocialiteController::class,'HandleFaceBookCallBack'])->name('callback');
     });
-});
+});*/
 
 
 

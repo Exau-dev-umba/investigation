@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginWithOTPController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -21,12 +22,20 @@ Route::get('/', function () {
 
 
 // Login with OTP Routes
-Route::prefix('/otp')->middleware('guest')->name('otp.')->controller(LoginWithOTPController::class)->group(function(){
+/*Route::prefix('/otp')->middleware('guest')->name('otp.')->controller(LoginWithOTPController::class)->group(function(){
     Route::get('/login','login')->name('login');
     Route::post('/generate','generate')->name('generate');
     Route::get('/verification/{userId}','verification')->name('verification');
     Route::post('login/verification','loginWithOtp')->name('loginWithOtp');
-});
+});*/
+
+// Login with OTP Routes Orange RDC
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/otp-verify', [AuthController::class, 'showOtpForm'])->name('otp.verify');
+Route::post('/otp-verify', [AuthController::class, 'verifyOtp']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Socialite Routes
 Route::prefix('oauth/')->group(function(){

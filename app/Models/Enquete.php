@@ -17,7 +17,7 @@ class Enquete extends Model
         'entites_concernes',
         'type_cas',
         'repete',
-        'libelle',
+        'libele',
         'avere',
         'date_demarrage',
         'status',

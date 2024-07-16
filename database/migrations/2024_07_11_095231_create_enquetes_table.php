@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('entites_concernes');
             $table->string('type_cas');
             $table->boolean('repete');
-            $table->string('libelle');
+            $table->string('libele');
             $table->boolean('avere');
             $table->dateTime('date_demarrage');
             $table->string('status');

@@ -21,12 +21,13 @@
     <!-- Font Awesome -->
     {{-- Favicons --}}
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/favicon/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('admin/favicon/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/favicon/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/LOGO_ORANGE.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/LOGO_ORANGE.png') }}">
     <link rel="manifest" href="{{ asset('admin/favicon/site.webmanifest') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"href="{{ asset('admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/jqvmap/jqvmap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
@@ -54,16 +55,17 @@
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
+                    <!--div class="image">
                         @if (Auth::user()->avatar != null)
-                            <img src="{{ Auth::user()->avatar }}" class="img-circle elevation-2" alt="User Image">
-                        @else
-                            <img src="{{ asset('admin/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
-                                alt="User Image">
-                        @endif
-                    </div>
+<img src="{{ Auth::user()->avatar }}" class="img-circle elevation-2" alt="App image">
+@else
+<img src="{{ asset('admin/dist/img/LOGO_ORANGE.png') }}" class="img-circle elevation-2"
+                                alt="App image">
+@endif
+                    </div-->
                     <div class="info">
-                        <a href="{{ route('admin.dashboard') }}" class="d-block">{{ config('app.name') }}</a>
+                        <a href="{{ route('admin.dashboard') }}" class="d-block">ORANGE RDC |
+                            {{ config('app.name') }}</a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->
@@ -103,8 +105,8 @@
     </div>
     <!-- ./wrapper -->
     <footer class="main-footer">
-        <strong>Copyright © 2023-{{ date('Y') }} <a href="nihirz.netlify.app">Zala
-                Nihir</a>.</strong> All rights reserved.
+        <strong>Copyright ©{{ date('Y') }} <a href="https://orange.cd">Orange RDC</a>.</strong> Tout droit
+        réserver.
     </footer>
     <!-- ./wrapper -->
 
@@ -166,7 +168,6 @@
                 });
             }, false);
         })();
-
         // Toastr alerts
         toastr.options = {
             "progressBar": true,

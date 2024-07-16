@@ -16,12 +16,10 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', function () {
-    $readmePath = base_path('README.md');
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-    return view('welcome', [
-        'readmeContent' => Str::markdown(file_get_contents($readmePath)),
-    ]);
-});
+
 // Login with OTP Routes
 Route::prefix('/otp')->middleware('guest')->name('otp.')->controller(LoginWithOTPController::class)->group(function(){
     Route::get('/login','login')->name('login');
@@ -39,7 +37,7 @@ Route::prefix('oauth/')->group(function(){
 
     Route::prefix('/google/login')->name('google.')->group(function(){
         Route::get('/',[SocialiteController::class,'redirectToGoogle'])->name('login');
-        Route::get('/callback',[SocialiteController::class,'HandleGoogleCallBack'])->name('callback');        
+        Route::get('/callback',[SocialiteController::class,'HandleGoogleCallBack'])->name('callback');
     });
 
     Route::prefix('/facebook/login')->name('facebook.')->group(function(){

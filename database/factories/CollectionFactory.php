@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,8 @@ class CollectionFactory extends Factory
             'slug' => $this->faker->slug,
             'image' => 'admin/dist/img/avatar.png',
             'pdf' => 'admin/pdf/dummy.pdf',
-            'category_id' => $this->faker->numberBetween(1, 10),
+            'category_id' => Category::inRandomOrder()->first()->id,
+            //'category_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

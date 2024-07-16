@@ -5,7 +5,7 @@
     @endsection
 
     <div class="login-box">
-        <div class="card card-outline card-primary">
+        <div class="card card-outline card-orange">
             <div class="card-header text-center">
                 <a href="/" class="h1"><b>{{ config('app.name') }}</a>
             </div>

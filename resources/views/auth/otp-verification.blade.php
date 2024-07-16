@@ -5,7 +5,7 @@
             <div class="card mt-4">
                 <div class="card-body p-4">
                     <div class="text-center mt-2">
-                        <h5 class="text-primary">Verify Your OTP !</h5>
+                        <h5 class="text-primary">Verifiez votre OTP !</h5>
                         <p class="text-muted">Sign in to continue to {{ config('app.name') }}.</p>
                         <x-auth-session-status class="mb-4" :status="session('status')" />
                         @if (session('error'))

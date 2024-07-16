@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Enquete;
 use App\Models\Product;
 use App\Models\User;
 use Closure;
@@ -19,15 +20,18 @@ class Dashboard extends Component
     {
         $user = User::count();
         view()->share('user',$user);
-        
+
         $category = Category::count();
         view()->share('category',$category);
-        
+
         $product = Product::count();
         view()->share('product',$product);
-        
+
         $collection = Collection::count();
         view()->share('collection',$collection);
+
+        $enquete = Enquete::all();
+        view()->share('enquete',$enquete);
     }
 
     /**

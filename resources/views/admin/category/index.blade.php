@@ -1,5 +1,5 @@
 <x-admin>
-    @section('title','Category')
+    @section('title', 'Category')
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Category Table</h3>
@@ -11,6 +11,7 @@
             <table class="table table-striped" id="categoryTable">
                 <thead>
                     <tr>
+                        <th>N°</th>
                         <th>Name</th>
                         <th>Action</th>
                         <th></th>
@@ -19,6 +20,7 @@
                 <tbody>
                     @foreach ($data as $cat)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $cat->name }}</td>
                             <td><a href="{{ route('admin.category.edit', encrypt($cat->id)) }}"
                                     class="btn btn-sm btn-primary">Edit</a></td>

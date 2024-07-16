@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image');
             $table->string('pdf');
-            $table->foreignIdFor(Category::class)->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            //$table->foreign('categorie_id')->references('id')->on('categories');
+            //$table->foreignIdFor(Category::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

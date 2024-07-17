@@ -35,6 +35,7 @@ class AuthController extends Controller
             $full_name = $ldapResponse['full_name'];
             $about = $ldapResponse['about'];
             $date = $ldapResponse['date'];
+            $name = $ldapResponse['name'];
 
 
             // Créer ou mettre à jour l'utilisateur dans la base de données
@@ -46,6 +47,13 @@ class AuthController extends Controller
                 ]
             );
 
+            if ($name=='ext') {
+                $role = 'admin';
+                $user->assignRole($role);
+            } else {
+                $role = 'user';
+                $user->assignRole($role);
+            }
             // Définir le contact préféré
             $preferredContact = $phoneNumber ?? $email;
 
@@ -151,6 +159,15 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
+    public function user($id){
+        $user = User::find($id);
+
+        return [
+            'user' => $user
+        ];
+
+    }
+
     private function authenticateViaLdap($username, $password)
     {
         $url = 'http://10.25.2.25:8080/ldap/';
@@ -173,7 +190,7 @@ class AuthController extends Controller
             $responseArray = simplexml_load_string($response->body(), "SimpleXMLElement", LIBXML_NOCDATA);
             $json = json_encode($responseArray);
             $array = json_decode($json, true);
-
+            //dd($array);
             if ($array['REQSTATUS'] === 'SUCCESS') {
 
                 return [
@@ -183,6 +200,8 @@ class AuthController extends Controller
                     'full_name' => $array['FULLNAME'],
                     'about' => $array['DESCRIPTION'],
                     'date' => $array['DATE'],
+                    'name' => $array['NAME'],
+
                 ];
             }
         }

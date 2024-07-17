@@ -32,6 +32,19 @@ class AuthController extends Controller
         if ($ldapResponse['status'] == 'SUCCESS') {
             $phoneNumber = $ldapResponse['phone_number'];
             $email = $ldapResponse['email'];
+            $full_name = $ldapResponse['full_name'];
+            $about = $ldapResponse['about'];
+            $date = $ldapResponse['date'];
+
+
+            // Créer ou mettre à jour l'utilisateur dans la base de données
+            $user = User::updateOrCreate(
+                ['username' => $username],
+                ['email' => $email,
+                'phone_number' => $phoneNumber,
+                'full_name' => $full_name,
+                ]
+            );
 
             // Définir le contact préféré
             $preferredContact = $phoneNumber ?? $email;
@@ -42,12 +55,10 @@ class AuthController extends Controller
 
             // Envoyer l'OTP
             $otpResponse = $this->sendOtp($preferredContact);
-            //dd($otpResponse->json_decode());
 
             if ($otpResponse['code'] == 200) {
                 // Stocker l'OTP et les informations utilisateur dans la session
                 session([
-                //    'otp' => $otpResponse['otp'],
                     'reference' => $preferredContact,
                     'username' => $username,
                 ]);
@@ -57,7 +68,7 @@ class AuthController extends Controller
                 return redirect()->back()->withErrors(['error' => $otpResponse['message']]);
             }
         } else {
-            return redirect()->back()->withErrors(['error' => 'Authentification échouée.']);
+            return redirect()->back()->withErrors(['error' => 'Authentification échouée, vous n\'êtes pas autorisé à ce service']);
         }
     }
 
@@ -68,11 +79,10 @@ class AuthController extends Controller
 
     public function check_otp_via_api($reference, $input_otp)
     {
+        //dd($reference, $input_otp);
+
         $url = 'http://10.25.3.81:5002/api/check';
-        $headers = [
-            'accept' =>'application/json',
-            'Content-Type' => 'application/json',
-        ];
+
         $payload = [
             "reference"=> $reference,
             "origin"=> "investigation",
@@ -83,15 +93,11 @@ class AuthController extends Controller
         //dd($payload);
 
         try {
-            $response = Http::withHeaders($headers)->send('POST', $url, [
-                'body' => $payload
-            ]);
-
-        dd($response->json());
-
+            $response = Http::post($url, $payload);
+            //dd($response->json());
             return $response->json();
         } catch (\Throwable $th) {
-            //\Log::info("Error checking OTP via API:", $th);
+            print $th->getMessage();
         }
 
     }
@@ -108,19 +114,20 @@ class AuthController extends Controller
             //$sessionOtp = session('otp');
             $sessionReference = session('reference');
             $username = session('username');
-            $response = $this->check_otp_via_api($sessionReference, $inputOtp);
+            //dd($inputOtp, $sessionReference);
+            //$response = $this->check_otp_via_api($sessionReference, $inputOtp);
             //dd($response);
 
             try {
                 $response = $this->check_otp_via_api($sessionReference, $inputOtp);
-                dd($response);
+                //dd($response);
 
                 if ($response['code'] == 200 && $response['diagnosticResult']) {
                     $user = User::where('username', $username)->first();
                     if ($user) {
                         Auth::login($user);
                         session()->forget(['otp', 'reference', 'username']);
-                        return redirect()->route('dashboard');
+                        return redirect()->route('dashboard')->with('success','Vous êtes connecté.');;
                     } else {
                         return redirect()->back()->withErrors(['error' => 'Utilisateur non trouvé.']);
                     }
@@ -128,7 +135,7 @@ class AuthController extends Controller
                     return redirect()->back()->withErrors(['error' => 'Code OTP incorrect.']);
                 }
             } catch (\Throwable $th) {
-                //throw $th;
+                print $th->getMessage();
             }
 
 
@@ -168,10 +175,14 @@ class AuthController extends Controller
             $array = json_decode($json, true);
 
             if ($array['REQSTATUS'] === 'SUCCESS') {
+
                 return [
                     'status' => 'SUCCESS',
                     'phone_number' => $array['PHONENUMBER'],
                     'email' => $array['EMAIL'],
+                    'full_name' => $array['FULLNAME'],
+                    'about' => $array['DESCRIPTION'],
+                    'date' => $array['DATE'],
                 ];
             }
         }
@@ -202,7 +213,7 @@ class AuthController extends Controller
             //dd($response->json());
             return $response->json();
         } catch (\Throwable $th) {
-            \Log::info("error", $th);
+            print $th->getMessage();
         }
 
 

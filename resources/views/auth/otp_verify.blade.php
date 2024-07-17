@@ -17,10 +17,27 @@
             <div class="card-body">
                 <p class="login-box-msg">Saisissez le code qui vous a été envoyé sur votre numéro</p>
 
+                <!-- Section pour les messages de succès ou d'erreur -->
+                @if (session('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('otp.verify') }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
-                        <input id="otp" class="form-control" placeholder="Saisissez le code" type="text"
+                        <input id="otp" class="form-control" placeholder="Saisissez le code" type="otp"
                             name="otp" :value="old('otp')" required autofocus autocomplete="otp">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -30,7 +47,8 @@
                         <x-input-error :messages="$errors->get('username')" class="mt-2" />
                     </div>
                     <div class="input-group mb-3">
-                        <button type="submit" class="btn bg-orange btn-block "><span class="text-white">Vérifier mon compte</span></button>
+                        <button type="submit" class="btn bg-orange btn-block "><span class="text-white">Vérifier mon
+                                compte</span></button>
                     </div>
                 </form>
                 <p class="mb-1">

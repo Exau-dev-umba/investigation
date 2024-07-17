@@ -17,6 +17,24 @@
             <div class="card-body">
                 <p class="login-box-msg">Connectez-vous</p>
 
+
+                <!-- Section pour les messages de succès ou d'erreur -->
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('login.ldap') }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
@@ -50,17 +68,12 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn bg-orange  "><span class="text-white">Connexion</span></button>
+                            <button type="submit" class="btn bg-orange  "><span
+                                    class="text-white">Connexion</span></button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
-                <p class="mb-1">
-                    <a class="text-dark" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
-                </p>
-                <p class="mb-0">
-                    <a class="text-dark" href="{{ route('otp.verify') }}" class="text-center">Créer un nouveau compte</a>
-                </p>
             </div>
             <!-- /.card-body -->
         </div>

@@ -30,4 +30,20 @@ class Enquete extends Model
         'date_final_pub_rapport',
         'date_diffusion',
     ];
+
+
+    public function alerteur()
+    {
+        return $this->belongsTo(Alerteur::class);
+    }
+
+    public function recommandations()
+    {
+        return $this->belongsToMany(Recommandation::class);
+    }
+
+    public function sanctions()
+    {
+        return $this->belongsToMany(Sanction::class);
+    }
 }

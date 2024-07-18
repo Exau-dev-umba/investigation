@@ -180,33 +180,42 @@ class AuthController extends Controller
             <DATE>" . now()->format('Y-m-d H:i:s') . "</DATE>
         </COMMANDE>";
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/xml'
-        ])->send('POST', $url, [
-            'body' => $payload
-        ]);
 
-        if ($response->successful()) {
-            $responseArray = simplexml_load_string($response->body(), "SimpleXMLElement", LIBXML_NOCDATA);
-            $json = json_encode($responseArray);
-            $array = json_decode($json, true);
-            //dd($array);
-            if ($array['REQSTATUS'] === 'SUCCESS') {
 
-                return [
-                    'status' => 'SUCCESS',
-                    'phone_number' => $array['PHONENUMBER'],
-                    'email' => $array['EMAIL'],
-                    'full_name' => $array['FULLNAME'],
-                    'about' => $array['DESCRIPTION'],
-                    'date' => $array['DATE'],
-                    'name' => $array['NAME'],
 
-                ];
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/xml'
+            ])->send('POST', $url, [
+                        'body' => $payload
+                    ]);
+
+            if ($response->successful()) {
+                $responseArray = simplexml_load_string($response->body(), "SimpleXMLElement", LIBXML_NOCDATA);
+                $json = json_encode($responseArray);
+                $array = json_decode($json, true);
+                //dd($array);
+                if ($array['REQSTATUS'] === 'SUCCESS') {
+
+                    return [
+                        'status' => 'SUCCESS',
+                        'phone_number' => $array['PHONENUMBER'],
+                        'email' => $array['EMAIL'],
+                        'full_name' => $array['FULLNAME'],
+                        'about' => $array['DESCRIPTION'],
+                        'date' => $array['DATE'],
+                        'name' => $array['NAME'],
+
+                    ];
+                }
+            } else {
+                return ['status' => 'FAIL'];
+
             }
+        } catch (\Throwable $th) {
+            print $th->getMessage();
         }
 
-        return ['status' => 'FAIL'];
     }
 
     private function sendOtp($destination)

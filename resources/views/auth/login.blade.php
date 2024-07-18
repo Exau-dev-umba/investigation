@@ -35,17 +35,18 @@
                     </div>
                 @endif
 
-                <form action="{{ route('login.ldap') }}" method="POST">
+                <form action="{{ route('login') }}" method="POST"><!--route('login.ldap')-->
                     @csrf
                     <div class="input-group mb-3">
-                        <input id="username" class="form-control" placeholder="Votre CUID" type="username"
-                            name="username" :value="old('username')" required autofocus autocomplete="username">
+                        <!-- in dev ordc email=username -->
+                        <input id="email" class="form-control" placeholder="Votre CUID" type="email"
+                            name="email" :value="old('email')" required autofocus autocomplete="email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
                             </div>
                         </div>
-                        <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
                     <div class="input-group mb-3">
                         <input id="password" class="form-control" placeholder="Mot de passe" type="password"

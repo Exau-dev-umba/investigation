@@ -16,4 +16,9 @@ class Alerteur extends Model
         'telephone',
         'cuid',
     ];
+
+    public function enquete()
+    {
+        return $this->hasMany(Enquete::class);
+    }
 }

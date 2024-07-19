@@ -11,13 +11,15 @@ class Sanction extends Model
 
     protected $fillable = [
         'num_ordre',
-        'reference',
-        'recommandation',
-        'causes',
-        'acceptation',
-        'commentaires',
-        'date_cloture',
-        'deadline',
+        'agent',
+        'statut',
+        'nbr_jour_pub_rapport',
+        'date_pub_rh',
+        'date_envoie_demande_exlp',
+        'date_reception_demande_exlp',
+        'date_sanction',
+        'evidences',
+        'nbr_jours_passe_sla',
     ];
 
     public function enquete()

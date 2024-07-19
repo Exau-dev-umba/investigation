@@ -12,7 +12,6 @@ class Enquete extends Model
     protected $fillable = [
         'num_ordre',
         'date_reception',
-        'provenance',
         'categorie',
         'entites_concernes',
         'type_cas',
@@ -35,6 +34,11 @@ class Enquete extends Model
     public function alerteur()
     {
         return $this->belongsTo(Alerteur::class);
+    }
+
+    public function plaintes()
+    {
+        return $this->belongsTo(Plainte::class);
     }
 
     public function recommandations()

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Alerteur;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,7 +27,7 @@ class EnqueteFactory extends Factory
         return [
             'num_ordre' => $this->faker->numberBetween(1,100),
             'date_reception'=> $this->faker->dateTime(),
-            'provenance'=> $this->faker->name,
+            'provenance_id'=> Alerteur::inRandomOrder()->first()->id,
             'categorie'=> $this->faker->randomElement($category),
             'entites_concernes'=> $this->faker->randomElement($entite),
             'type_cas'=> $this->faker->randomElement($typecas),

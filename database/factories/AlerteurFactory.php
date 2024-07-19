@@ -17,7 +17,10 @@ class AlerteurFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'full_name'=> $this->faker->name(),
+            'adresse'=>$this->faker->address(),
+            'telephone'=>$this->faker->phoneNumber(),
+            'cuid'=>$this->faker->userAgent(),
         ];
     }
 }

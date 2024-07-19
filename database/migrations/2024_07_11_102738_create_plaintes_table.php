@@ -14,14 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->integer('num_ordre');
             $table->dateTime('date_pub_rapport_enquete');
-            $table->string('reference');
+            //$table->string('reference');
             $table->string('type_cas');
             $table->unsignedBigInteger('enquete_id');
             $table->foreign('enquete_id')->references('id')->on('enquetes')->onDelete('cascade');
-            $table->boolean('noms');
+            $table->string('noms');
             $table->string('statut');
-            $table->dateTime('evidences');
-            $table->dateTime('nbr_jours_passe_sla');
+            $table->string('evidences', 255);
+            $table->integer('nbr_jours_passe_sla');
             $table->timestamps();
         });
     }

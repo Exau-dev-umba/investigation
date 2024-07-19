@@ -13,6 +13,6 @@ class EnqueteSeeder extends Seeder
      */
     public function run(): void
     {
-        Enquete::factory(10)->create();
+        //Enquete::factory(10)->create();
     }
 }

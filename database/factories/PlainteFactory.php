@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Enquete;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,18 @@ class PlainteFactory extends Factory
      */
     public function definition(): array
     {
+
+        $statuts = ['Fait', 'Encours', 'Ouvert'];
+
         return [
-            //
+            'num_ordre'=> $this->faker->numberBetween(20, 500),
+            'date_pub_rapport_enquete'=>$this->faker->dateTimeBetween('-2 years','now'),
+            'enquete_id'=>Enquete::inRandomOrder()->first()->id,
+            'type_cas'=>$this->faker->name(),
+            'statut'=> $this->faker->randomElement($statuts),
+            'noms'=>$this->faker->name(),
+            'evidences'=>$this->faker->text(200),
+            'nbr_jours_passe_sla'=>$this->faker->numberBetween(1,5),
         ];
     }
 }

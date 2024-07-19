@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('sanctions', function (Blueprint $table) {
             $table->id();
-            $table->string('reference');
+            //$table->string('reference');
             $table->string('agent');
-            $table->string('statut_sanction');
+            $table->integer('num_ordre');
+            $table->string('statut');
             //$table->unsignedBigInteger('type_sanction_id');
             //$table->unsignedBigInteger('categorie_sanction_id');
             //$table->unsignedBigInteger('motif_sanction_id');
@@ -23,16 +24,17 @@ return new class extends Migration
             //$table->unsignedBigInteger('enquete_id');
             //$table->unsignedBigInteger('recommandation_id');
             $table->foreignId('enquete_id')->references('id')->on('enquetes')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('categorie_sanction_id')->references('id')->on('categorie_sanctions')->onDelete('restrict')->onUpdate('restrict');            $table->foreignId('type_sanction_id')->references('id')->on('type_sanctions')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('categorie_sanction_id')->references('id')->on('categorie_sanctions')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('type_sanction_id')->references('id')->on('type_sanctions')->onDelete('restrict')->onUpdate('restrict');
             $table->foreignId('employeur_id')->references('id')->on('employeurs')->onDelete('restrict')->onUpdate('restrict');
             $table->foreignId('motif_sanction_id')->references('id')->on('motif_sanctions')->onDelete('restrict')->onUpdate('restrict');
             $table->string('nbr_jour_pub_rapport');
-            $table->string('fontion_agent');
+            //$table->string('fontion_agent');
             $table->dateTime('date_pub_rh');
             $table->dateTime('date_envoie_demande_exlp');
             $table->dateTime('date_reception_demande_exlp');
             $table->dateTime('date_sanction');
-            $table->string('evidences');
+            $table->string('evidences', 255);
             $table->string('nbr_jours_passe_sla');
             $table->timestamps();
         });

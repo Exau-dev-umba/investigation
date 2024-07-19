@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->integer('num_ordre');
             $table->dateTime('date_reception');
-            $table->string('recommandation');
+            $table->string('recommandation', 255);
             $table->string('causes');
             $table->boolean('acceptation');
-            $table->string('commentaires');
+            $table->string('commentaires', 255);
             $table->dateTime('date_cloture');
             $table->dateTime('deadline');
             $table->timestamps();

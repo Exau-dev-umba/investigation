@@ -10,14 +10,13 @@ class Alerteur extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom',
-        'prenom',
+        'full_name',
         'adresse',
         'telephone',
         'cuid',
     ];
 
-    public function enquete()
+    public function enquetes()
     {
         return $this->hasMany(Enquete::class);
     }

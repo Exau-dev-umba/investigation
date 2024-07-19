@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->integer('num_ordre');
             $table->dateTime('date_reception');
-            $table->string('provenance');
+            //$table->string('provenance');
+            $table->unsignedBigInteger('provenance_id');
+            $table->foreign('provenance_id')->references('id')->on('alerteurs')->onDelete('cascade');
             $table->string('categorie');
             $table->string('entites_concernes');
             $table->string('type_cas');
             $table->boolean('repete');
-            $table->string('libele');
+            $table->string('libele',255);
             $table->boolean('avere');
             $table->dateTime('date_demarrage');
             $table->string('status');

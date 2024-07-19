@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recommandation_enquete', function (Blueprint $table) {
+        Schema::create('enquete_recommandation', function (Blueprint $table) {
             //$table->id();
             $table->bigIncrements('id');
             $table->unsignedBigInteger('enquete_id');
             $table->unsignedBigInteger('recommandation_id');
             $table->foreign('enquete_id')->references('id')->on('enquetes')->onDelete('cascade');
-            $table->foreign('recommandation_id')->references('id')->on('recommandations')->onDelete('cascade');
+            $table->foreign('recommandation_id')->references('id')->on('recommandations')->onDelete('restrict');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recommandation_enquete');
+        Schema::dropIfExists('enquete_recommandation');
     }
 };

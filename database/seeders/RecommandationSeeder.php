@@ -13,6 +13,6 @@ class RecommandationSeeder extends Seeder
      */
     public function run(): void
     {
-        Recommandation::factory(10)->create();
+        //Recommandation::factory(10)->create();
     }
 }

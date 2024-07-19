@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('alerteurs', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->nullable();
-            $table->string('prenom')->nullable();
+            $table->string('full_name')->nullable();
             $table->string('cuid')->nullable();
             $table->string('telephone')->nullable();
-            $table->string('adressealerteur')->nullable();
+            $table->string('adresse')->nullable();
             $table->timestamps();
         });
     }

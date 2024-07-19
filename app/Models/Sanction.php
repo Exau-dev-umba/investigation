@@ -20,8 +20,28 @@ class Sanction extends Model
         'deadline',
     ];
 
-    public function enquetes()
+    public function enquete()
     {
-        return $this->belongsToMany(Enquete::class);
+        return $this->belongsTo(Enquete::class);
+    }
+
+    public function type_sanciton()
+    {
+        return $this->belongsTo(Type_sanction::class);
+    }
+
+    public function motif_sanction()
+    {
+        return $this->belongsTo(Motif_sanction::class);
+    }
+
+    public function categorie_sanction()
+    {
+        return $this->belongsTo(Categorie_sanction::class);
+    }
+
+    public function employeur()
+    {
+        return $this->belongsTo(Employeur::class);
     }
 }

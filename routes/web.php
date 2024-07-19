@@ -56,8 +56,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });*/
 
 
-
 // Auth routes
 require __DIR__.'/auth.php';
 // Admin Routes
 require('admin.php');
+
+//Recommandation Routes
+require('web_recommandation.php');

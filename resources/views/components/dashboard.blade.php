@@ -12,7 +12,7 @@
                         @endif
                     </div>
                     <div class="icon">
-                        <i class="fa fa-users"></i>
+                        <i class="fa fa-search"></i>
                     </div>
                     <a href="{{ route('admin.user.index') }}" class="small-box-footer">View <i
                             class="fas fa-arrow-circle-right"></i></a>
@@ -29,7 +29,7 @@
                         @endif
                     </div>
                     <div class="icon">
-                        <i class="fas fa-list-alt"></i>
+                        <i class="fa fa-check-circle"></i>
                     </div>
                     <a href="{{ route('admin.category.index') }}" class="small-box-footer">View <i
                             class="fas fa-arrow-circle-right"></i></a>
@@ -46,7 +46,7 @@
                         @endif
                     </div>
                     <div class="icon">
-                        <i class="fas fas fa-th"></i>
+                        <i class="fa fa-exclamation-circle"></i>
                     </div>
                     <a href="{{ route('admin.product.index') }}" class="small-box-footer">View <i
                             class="fas fa-arrow-circle-right"></i></a>
@@ -63,7 +63,7 @@
                         @endif
                     </div>
                     <div class="icon">
-                        <i class="fas fas fa-file-pdf"></i>
+                        <i class="fa fa-bell"></i>
                     </div>
                     <a href="{{ route('admin.collection.index') }}" class="small-box-footer">View <i
                             class="fas fa-arrow-circle-right"></i></a>
@@ -260,12 +260,11 @@
                             <td>{{ $enq->categorie }}</td>
                             <td>{{ $enq->date_reception }}</td>
                             <td>{{ $enq->date_demarrage }}</td>
-                            <td><span class="badge bg-info">{{ $enq->status }}</span></td>
-
+                            <td><span class="badge {{ ($enq->status=='close') ? 'bg-info' : ($enq->status=='ouvert' ? 'bg-succes' : 'bg-warnig') }}">{{ $enq->status }}</span></td>
                             <td>
-                                <a type="submit" class="btn btn-sm bg-info">Detail</a>
-                                <a href="" class="btn btn-sm bg-orange text-white">Edit</a>
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-sm bg-gradient-info"><i class="fa fa-eye"></i></button>
+                                <a href="" class="btn btn-sm bg-gradient-warning text-white"><i class="fas fa-pencil-alt"></i></a>
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
 
                             </td>
                         </tr>

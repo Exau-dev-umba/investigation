@@ -4,7 +4,10 @@ namespace App\View\Components;
 
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Plainte;
 use App\Models\Product;
+use App\Models\Recommandation;
+use App\Models\Sanction;
 use App\Models\SubCategory;
 use App\Models\User;
 use Closure;
@@ -22,22 +25,31 @@ class Sidebar extends Component
     {
         $userCount = User::count();
         view()->share('userCount',$userCount);
-        
+
+        $recommandationCount = Recommandation::count();
+        view()->share('recommandationCount', $recommandationCount);
+
+        $sanctionCount = Sanction::count();
+        view()->share('sanctionCount', $sanctionCount);
+
+        $plainteCount = Plainte::count();
+        view()->share('plainteCount', $plainteCount);
+
         $RoleCount = Role::count();
         view()->share('RoleCount',$RoleCount);
-        
+
         $PermissionCount = Permission::count();
         view()->share('PermissionCount',$PermissionCount);
-        
+
         $CategoryCount = Category::count();
         view()->share('CategoryCount',$CategoryCount);
-        
+
         $SubCategoryCount = SubCategory::count();
         view()->share('SubCategoryCount',$SubCategoryCount);
-        
+
         $CollectionCount = Collection::count();
         view()->share('CollectionCount',$CollectionCount);
-        
+
         $ProductCount = Product::count();
         view()->share('ProductCount',$ProductCount);
     }

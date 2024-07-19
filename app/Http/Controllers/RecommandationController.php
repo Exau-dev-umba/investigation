@@ -13,7 +13,8 @@ class RecommandationController extends Controller
      */
     public function index()
     {
-        //
+        $recommandations = Recommandation::all();
+        return view('admin.recommandation.index', compact('recommandations'));
     }
 
     /**

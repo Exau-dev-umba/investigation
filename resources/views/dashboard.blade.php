@@ -1,4 +1,4 @@
 <x-admin>
-    @section('title','Dashboard Enquête')
+    @section('title','Dashboard')
     <x-dashboard />
 </x-admin>

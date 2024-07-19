@@ -1,12 +1,3 @@
-<!--
-/*!
- *   AdminLTE With Laravel
- *   Author: Nihir Zala
- *   Website: https://nihirz.netlify.app
- *   License: Open source - MIT <https://opensource.org/licenses/MIT>
- */
--->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,8 +17,7 @@
     <link rel="manifest" href="{{ asset('admin/favicon/site.webmanifest') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet"href="{{ asset('admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/jqvmap/jqvmap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
@@ -38,6 +28,11 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <style>
+        a:hover {
+    color: orange !important;
+}
+    </style>
     @yield('css')
 </head>
 
@@ -55,6 +50,10 @@
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="{{ asset('admin/dist/img/LOGO_ORANGE.png') }}" class=" img-fluid"
+                                alt="App image">
+                    </div>
                     <!--div class="image">
                         @if (Auth::user()->avatar != null)
 <img src="{{ Auth::user()->avatar }}" class="img-circle elevation-2" alt="App image">
@@ -105,8 +104,7 @@
     </div>
     <!-- ./wrapper -->
     <footer class="main-footer">
-        <strong>Copyright ©{{ date('Y') }} <a href="https://orange.cd">Orange RDC</a>.</strong> Tout droit
-        réserver.
+        <strong>Copyright ©{{ date('Y') }} <a href="https://orange.cd"><span class="text-orange">Orange RDC | FIC</span></a></strong>
     </footer>
     <!-- ./wrapper -->
 

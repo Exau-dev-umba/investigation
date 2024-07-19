@@ -18,6 +18,11 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
+    <style>
+        a:hover {
+    color: orange !important;
+}
+    </style>
 </head>
 
 <body class="hold-transition login-page">

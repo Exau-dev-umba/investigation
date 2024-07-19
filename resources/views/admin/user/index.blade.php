@@ -1,8 +1,8 @@
 <x-admin>
-    @section('title', 'Users')
+    @section('title', 'Utilisateurs')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">User Table</h3>
+            <h3 class="card-title">Liste des utilisateurs</h3>
             <div class="card-tools"><a href="{{ route('admin.user.create') }}" class="btn btn-sm btn-primary">Add</a></div>
         </div>
         <div class="card-body">
@@ -26,14 +26,14 @@
                             <td>{{ $user->created_at }}</td>
                             <td>
                                 <a href="{{ route('admin.user.edit', encrypt($user->id)) }}"
-                                    class="btn btn-sm btn-primary">Edit</a>
+                                    class="btn btn-sm btn-primary">Modifier</a>
                             </td>
                             <td>
                                 <form action="{{ route('admin.user.destroy', encrypt($user->id)) }}" method="POST"
                                     onsubmit="return confirm('Are sure want to delete?')">
                                     @method('DELETE')
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
                                 </form>
                             </td>
                         </tr>

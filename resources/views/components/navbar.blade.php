@@ -11,7 +11,7 @@
                 @csrf
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <input type="submit" name="submit" value="Log out" class="btn btn-primary btn-sm">
+                    <input type="submit" name="submit" value="Déconnexion" class="btn bg-orange btn-sm text-white">
                     {{-- <a :href="route('logout')"
                         onclick="event.preventDefault();
                                     this.closest('form').submit();">

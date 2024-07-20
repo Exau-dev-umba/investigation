@@ -232,7 +232,7 @@
 
 
                 <div class="card-tools">
-                    <a href="{{ route('admin.enquete.create') }}" class="btn btn-sm btn-info">Ajouter une enquête</a>
+                    <a href="{{ route('admin.enquete.create') }}" class="btn btn-sm bg-black">Ajouter une enquête</a>
                 </div>
             </div>
             <div class="card-body">
